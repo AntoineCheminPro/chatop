@@ -1,49 +1,47 @@
 package com.openclassrooms.api_chatop.controller;
 
 
-import java.util.List;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.openclassrooms.api_chatop.controller.api.UserApi;
-import com.openclassrooms.api_chatop.dto.UserDTO;
+import com.openclassrooms.api_chatop.models.responses.UserResponse;
 import com.openclassrooms.api_chatop.services.UserService;
 
 @RestController
-public class UserController implements UserApi {
+@RequestMapping("user")
+public class UserController {
 
-    // field injection
-    @Autowired
     private final UserService userService;
 
-    //Getter injection
-    public UserService getUserService() {
-        return userService;
-    }
-
-    // constructor injection
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @Override
-    public UserDTO findById(Integer id) {
-        return userService.findById(id);
-    }
 
-    @Override
-    public List<UserDTO> findAll() {
-        return userService.findAll();
-    }
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserResponse> getUserDetails(@PathVariable("id") final Integer id) {
+        var user = userService.getUserById(id);
 
-    @Override
-    public UserDTO save(UserDTO userDTO) {
-        return userService.save(userDTO);
-    }
+        // Create a custom formatter with the desired pattern
+        var dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.ENGLISH);
 
-    @Override
-    public void delete(Integer id) {
-        userService.delete(id);
+        // Format the LocalDate to a string
+        String formattedDateString = user.getCreatedAt().format(dateTimeFormatter);
+
+        var rentalDto = UserResponse.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .created_at(formattedDateString)
+                .build();
+        return new ResponseEntity<>(rentalDto, HttpStatus.OK);
     }
 }

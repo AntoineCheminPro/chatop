@@ -1,30 +1,35 @@
 package com.openclassrooms.api_chatop;
 
-import java.nio.charset.StandardCharsets;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+
+import com.openclassrooms.api_chatop.models.Role;
+import com.openclassrooms.api_chatop.repositories.RoleRepository;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 
 @OpenAPIDefinition(info = @Info(title = "API ChatOp", version = "1.0", description = "API pour l'application ChatOp"))
 @EnableWebSecurity
-@EnableJpaRepositories("com.openclassrooms.api_chatop.repository")
+@EnableJpaRepositories("com.openclassrooms.api_chatop.repositories")
 @SpringBootApplication
-@EnableJpaAuditing
 public class ApiChatopApplication {
-	private static final Logger log = LoggerFactory.getLogger(ApiChatopApplication.class);
 
-	public static void main(String[] args) {
-		System.setProperty("file.encoding", StandardCharsets.UTF_8.name());
-		SpringApplication.run(ApiChatopApplication.class, args);
-		log.info("Application started !");
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ApiChatopApplication.class, args);
+    }
 
+@Bean
+    public CommandLineRunner runner (RoleRepository roleRepository) {
+        return args -> {
+                if(roleRepository.findByName("USER").isEmpty()) {
+                    roleRepository.save(Role.builder().name("USER").build());
+                }
+        };
+    }
 }
+
