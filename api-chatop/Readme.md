@@ -21,29 +21,32 @@ API ChatOp est une application RESTful développée avec Spring Boot, permettant
 
 1. Clonez le dépôt :
 
-   ```bash
    git clone https://github.com/votre-utilisateur/api-chatop.git
-   ```
 
 2. Accédez au répertoire du projet :
 
-   ```bash
    cd api-chatop
-   ```
 
 3. Modifiez le fichier `src/main/resources/application.properties` pour configurer votre base de données.
 
 4. Compilez le projet avec Maven :
 
-   ```bash
    mvn clean install
-   ```
 
 5. Exécutez l'application :
 
-   ```bash
    mvn spring-boot:run
-   ```
+## Installation de la base de données
+
+Pour installer la base de données dans MySQL, suivez ces étapes :
+
+1. Ouvrez MySQL.
+2. Créez une base de données :
+   CREATE DATABASE chatop;
+3. Sélectionnez la base de données :
+   USE chatop;
+
+4. Importez le fichier d'exportation `Ressources/chatop.sql`.
 
 ## Utilisation
 
