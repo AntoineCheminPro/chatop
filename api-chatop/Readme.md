@@ -65,7 +65,7 @@ Pour installer la base de données dans MySQL, suivez ces étapes :
 Après avoir démarré l'application, vous pouvez accéder à la documentation Swagger à l'adresse suivante :
 
 ```
-http://localhost:3001/swagger-ui/index.html
+http://localhost:3001/api/swagger-ui/index.html
 ```
 
 Cela vous permettra de visualiser et d'interagir avec les endpoints de l'API de manière conviviale.
